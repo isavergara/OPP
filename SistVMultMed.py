@@ -52,7 +52,14 @@ class Mascota:
 class sistemaV:
     def __init__(self):
         self.__lista_mascotas = []
-    
+
+    # Se verifica si ya se ha agregado un medicamento con el mismo nombre antes
+    def verificarExisteMedicamento(self, lista_medicamentos, medicamento):
+        if medicamento not in lista_medicamentos:
+            return False
+        else:
+            return True
+        
     def verificarExiste(self,historia):
         for m in self.__lista_mascotas:
             if historia == m.verHistoria():
@@ -113,14 +120,23 @@ def main():
                 fecha=input("Ingrese la fecha de ingreso (dia/mes/año): ")
                 nm=int(input("Ingrese cantidad de medicamentos: "))
                 lista_med=[]
+                medicamentos_ingresados = 0
 
-                for i in range(0,nm):
+                while nm == medicamentos_ingresados:
                     nombre_medicamentos = input("Ingrese el nombre del medicamento: ")
-                    dosis =int(input("Ingrese la dosis: "))
-                    medicamento = Medicamento()
-                    medicamento.asignarNombre(nombre_medicamentos)
-                    medicamento.asignarDosis(dosis)
-                    lista_med.append(medicamento)
+                    existe_medicamento = servicio_hospitalario.verificarExisteMedicamento(lista_med, nombre_medicamentos)
+                    if (not existe_medicamento):
+                        dosis =int(input("Ingrese la dosis: "))
+                        medicamento = Medicamento()
+                        medicamento.asignarNombre(nombre_medicamentos)
+                        medicamento.asignarDosis(dosis)
+                        lista_med.append(medicamento)
+                        medicamentos_ingresados = medicamentos_ingresados + 1
+                        print("Medicamento agregado con éxito")
+                    else:
+                        print("Ya has agregado el medicamento con anterioridad")
+
+
 
                 mas= Mascota()
                 mas.asignarNombre(nombre)
