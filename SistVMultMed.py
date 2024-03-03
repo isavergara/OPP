@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class Medicamento:
     def __init__(self):
         self.__nombre = "" 
@@ -5,48 +7,65 @@ class Medicamento:
     
     def verNombre(self):
         return self.__nombre 
+    
     def verDosis(self):
         return self.__dosis 
     
-    def asignarNombre(self,med):
+    def asignarNombre(self, med):
         self.__nombre = med 
-    def asignarDosis(self,med):
-        self.__dosis = med 
-        
-class Mascota:
     
+    def asignarDosis(self, med):
+        self.__dosis = med 
+
+class Mascota:
     def __init__(self):
-        self.__nombre= " "
-        self.__historia=0
-        self.__tipo=" "
-        self.__peso=" "
-        self.__fecha_ingreso=" "
-        self.__lista_medicamentos=[]
+        self.__nombre = ""
+        self.__historia = 0
+        self.__tipo = ""
+        self.__peso = ""
+        self.__fecha_ingreso = None
+        self.__lista_medicamentos = []
         
     def verNombre(self):
         return self.__nombre
+    
     def verHistoria(self):
         return self.__historia
+    
     def verTipo(self):
         return self.__tipo
+    
     def verPeso(self):
         return self.__peso
+    
     def verFecha(self):
-        return self.__fecha_ingreso
+        return self.__fecha_ingreso.strftime('%d/%m/%Y') if self.__fecha_ingreso else None
+    
     def verLista_Medicamentos(self):
         return self.__lista_medicamentos 
-            
-    def asignarNombre(self,n):
-        self.__nombre=n
-    def asignarHistoria(self,nh):
-        self.__historia=nh
-    def asignarTipo(self,t):
-        self.__tipo=t
-    def asignarPeso(self,p):
-        self.__peso=p
-    def asignarFecha(self,f):
-        self.__fecha_ingreso=f
-    def asignarLista_Medicamentos(self,n):
+    
+    def asignarNombre(self, n):
+        self.__nombre = n
+    
+    def asignarHistoria(self, nh):
+        self.__historia = nh
+    
+    def asignarTipo(self, t):
+        self.__tipo = t
+    
+    def asignarPeso(self, p):
+        self.__peso = p
+    
+    def asignarFecha(self, fecha):
+        try:
+            self.__fecha_ingreso = datetime.strptime(fecha, '%d/%m/%Y')
+        except ValueError as e:
+            print("Error: La fecha debe estar en formato dd/mm/aaaa.")
+            return False
+        return True
+    
+    
+    def asignarLista_Medicamentos(self, n):
         self.__lista_medicamentos = n 
 
 class sistemaV:
@@ -59,30 +78,21 @@ class sistemaV:
         if mascota.verHistoria() in self.__caninos:
             print("Ya existe un canino con esa historia clínica.")
         else:
-            self.__caninos = {**self.__caninos, **{mascota.verHistoria(): mascota}}
+            self.__caninos[mascota.verHistoria()] = mascota
             self.__lista_mascotas.append(mascota)
 
     def agregar_felino(self, mascota):
         if mascota.verHistoria() in self.__felinos:
             print("Ya existe un felino con esa historia clínica.")
         else:
-            self.__felinos = {**self.__felinos, **{mascota.verHistoria(): mascota}}
+            self.__felinos[mascota.verHistoria()] = mascota
             self.__lista_mascotas.append(mascota)
 
-
-    # Se verifica si ya se ha agregado un medicamento con el mismo nombre antes
-    def verificarExisteMedicamento(self, lista_medicamentos, medicamento):
-        if medicamento not in lista_medicamentos:
-            return False
-        else:
-            return True
-        
     def verificarExiste(self, historia, tipo_mascota):
         if tipo_mascota == "canino":
             return historia in self.__caninos
         elif tipo_mascota == "felino":
-         return historia in self.__felinos
-       
+            return historia in self.__felinos
         
     def verNumeroMascotas(self):
         return len(self.__lista_mascotas) 
@@ -92,17 +102,14 @@ class sistemaV:
             self.agregar_canino(mascota)
         elif mascota.verTipo() == "felino":
             self.agregar_felino(mascota)
-   
 
-    def verFechaIngreso(self,historia):
-        #busco la mascota y devuelvo el atributo solicitado
+    def verFechaIngreso(self, historia):
         for masc in self.__lista_mascotas:
             if historia == masc.verHistoria():
                 return masc.verFecha() 
         return None
 
-    def verMedicamento(self,historia):
-        #busco la mascota y devuelvo el atributo solicitado
+    def verMedicamento(self, historia):
         for masc in self.__lista_mascotas:
             if historia == masc.verHistoria():
                 return masc.verLista_Medicamentos() 
@@ -111,8 +118,8 @@ class sistemaV:
     def eliminarMascota(self, historia):
         for masc in self.__lista_mascotas:
             if historia == masc.verHistoria():
-                self.__lista_mascotas.remove(masc)  #opcion con el pop
-                return True  #eliminado con exito
+                self.__lista_mascotas.remove(masc)
+                return True  # eliminado con exito
         return False 
 
 def main():
@@ -137,7 +144,13 @@ def main():
             if servicio_hospitalario.verificarExiste(historia, tipo) == False:
                 nombre = input("Ingrese el nombre de la mascota: ")
                 peso = int(input("Ingrese el peso de la mascota: "))
-                fecha = input("Ingrese la fecha de ingreso (dia/mes/año): ")
+                fecha_valida = False
+                while not fecha_valida:
+                    fecha = input("Ingrese la fecha de ingreso de la mascota (dd/mm/aaaa): ")
+                    mascota = Mascota()  # Creamos una nueva instancia de Mascota
+                    fecha_valida = mascota.asignarFecha(fecha)  # Llamamos al método en la instancia de Mascota
+                    if not fecha_valida:
+                        print("Error: La fecha debe estar en formato dd/mm/aaaa.")
                 nm = int(input("Ingrese cantidad de medicamentos: "))
                 medicamentos_ingresados = 0
                 lista_med = []
