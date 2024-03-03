@@ -1,23 +1,31 @@
 from datetime import datetime
-
+#en clses medicamneto y mascota todos los detalles importantes están protegidos y solo se ven o se cambian por medio
+# de funciones especiales llamadas "getter" y "setter". Esto es como tener una caja fuerte donde guardas tus cosas 
+#más valiosas, y solo tú puedes abrir o cerrar la caja fuerte usando una llave especial.
+#Definición de clase medicamento
 class Medicamento:
+    #construtor de la clase
     def __init__(self):
         self.__nombre = "" 
         self.__dosis = 0 
-    
+    #getters
+    #los getters son como ventanas a través de las cuales puedes mirar lo que hay dentro de la caja fuerte sin abrir la caja misma.     
     def verNombre(self):
         return self.__nombre 
     
     def verDosis(self):
         return self.__dosis 
-    
+    #setters
+    #Los "setters" son como puertas pequeñas por las que puedes introducir nuevas cosas en la caja sin abrirla por completo
+    #así,se puede ver lo que hay dentro y cambiar cosas si es necesario, manteniendo todo seguro.
     def asignarNombre(self, med):
         self.__nombre = med 
     
     def asignarDosis(self, med):
         self.__dosis = med 
-
+#definición de clase mascota
 class Mascota:
+    #constructor
     def __init__(self):
         self.__nombre = ""
         self.__historia = 0
@@ -25,7 +33,7 @@ class Mascota:
         self.__peso = ""
         self.__fecha_ingreso = None
         self.__lista_medicamentos = []
-        
+     #getters   
     def verNombre(self):
         return self.__nombre
     
@@ -43,7 +51,7 @@ class Mascota:
     
     def verLista_Medicamentos(self):
         return self.__lista_medicamentos 
-    
+    #setters
     def asignarNombre(self, n):
         self.__nombre = n
     
@@ -55,7 +63,7 @@ class Mascota:
     
     def asignarPeso(self, p):
         self.__peso = p
-    
+    #método setter creado para validacion
     def asignarFecha(self, fecha):
         try:
             self.__fecha_ingreso = datetime.strptime(fecha, '%d/%m/%Y')
@@ -64,16 +72,20 @@ class Mascota:
             return False
         return True
     
-    
+    #setters
     def asignarLista_Medicamentos(self, n):
         self.__lista_medicamentos = n 
-
+#definimos clase sistema
 class sistemaV:
+    #comnstructor de clase
     def __init__(self):
         self.__caninos = {}
         self.__felinos = {}
         self.__lista_mascotas = []
-
+#polimorfismo y herencia
+# los métodos para agregar mascotas, ya sea un perro o un gato, pueden trabajar con cualquier tipo de mascota sin 
+# necesidad de camiar el codigo, como tener una llave que puede abrir varios tipos de cerradura.                        
+#Diferentes métodos para agregar e interactuar 
     def agregar_canino(self, mascota):
         if mascota.verHistoria() in self.__caninos:
             print("Ya existe un canino con esa historia clínica.")
