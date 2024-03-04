@@ -1,12 +1,14 @@
 #clase definida para representar pacientes del sistema
 class Paciente:
     #constructos de la clase paciente
+     # Encapsulamiento Los atributos están privados
     def __init__(self):
         self.__nombre = '' 
         self.__cedula = 0 
         self.__genero = '' 
         self.__servicio = '' 
 #métodos getters
+        
     def verNombre(self):
         return self.__nombre 
     def verCedula(self):
@@ -40,7 +42,7 @@ class Sistema:
     def ingresarPaciente(self,pac):
         self.__lista_pacientes.append(pac)
         return True
-
+#Polimorfismo, este método puede buscar pacientes por cédula o por nombre
     def verDatosPaciente(self, identifier):
         if isinstance(identifier, int):
             # Search by ID
@@ -93,7 +95,7 @@ def main():
                     print("No ingresado") 
         elif opcion == 2:
             #1. solicito la cedula que quiero buscar
-            c = int(input("Ingrese la cedula a buscar: ")) 
+            c = int(input("Ingrese la cédula de la paciente a buscar: ")) 
             #le pido al sistema que me devuelva en la variable p al paciente que tenga
             #la cedula c en la lista
             p = sis.verDatosPaciente(c) 
@@ -106,7 +108,7 @@ def main():
             else:
                 print("No existe un paciente con esa cedula") 
         elif opcion == 3:
-            nombre = input("Ingrese el nombre a buscar (puede ser completo o como recuerde): ")
+            nombre = input("Ingrese el nombre de la paciente a buscar (puede ser completo o como recuerde): ")
             #le pido al sistema que me devuelva en la variable p los pacientes que inicien con el nombre dado
             p = sis.verDatosPacienteNombre(nombre)
             #2. si encuentro al paciente imprimo los datos
