@@ -29,7 +29,7 @@ class Sistema:
     #constructor de la clase  
     def __init__(self):
         self.__lista_pacientes = [] 
-
+#metodos y acciones
     def verificarPaciente(self,cedula):
         for p in self.__lista_pacientes:
             if cedula == p.verCedula():
