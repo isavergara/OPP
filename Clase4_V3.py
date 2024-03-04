@@ -1,11 +1,12 @@
+#clase definida para representar pacientes del sistema
 class Paciente:
+    #constructos de la clase paciente
     def __init__(self):
         self.__nombre = '' 
         self.__cedula = 0 
         self.__genero = '' 
         self.__servicio = '' 
-              
-    #metodos get    
+#métodos getters
     def verNombre(self):
         return self.__nombre 
     def verCedula(self):
@@ -14,7 +15,7 @@ class Paciente:
         return self.__genero 
     def verServicio(self):
         return self.__servicio 
-    # metodos set
+#métodos setters para asignar valores
     def asignarNombre(self,n):
         self.__nombre = n 
     def asignarCedula(self,c):
@@ -22,42 +23,55 @@ class Paciente:
     def asignarGenero(self,g):
         self.__genero = g 
     def asignarServicio(self,s):
-        self.__servicio = s 
-        
-class Sistema:    
+        self.__servicio = s
+#clase sistema para manejar info de pacientes
+class Sistema:  
+    #constructor de la clase  
     def __init__(self):
         self.__lista_pacientes = [] 
-        
+
     def verificarPaciente(self,cedula):
         for p in self.__lista_pacientes:
             if cedula == p.verCedula():
+
                 return True 
         return False
-        
+
     def ingresarPaciente(self,pac):
         self.__lista_pacientes.append(pac)
         return True
-    
-    def verDatosPaciente(self, c):
-        if self.verificarPaciente(c) == False:
-            return None
-        for p in self.__lista_pacientes:
-            #retorne la cedula y la comparo con la ingresada por teclado
-            if c == p.verCedula():
-                return p #si encuentro el paciente lo retorno
-            
-    def verNumeroPacientes(self):
-        print("En el sistema hay: " + str(len(self.__lista_pacientes)) + " pacientes") 
 
+    def verDatosPaciente(self, identifier):
+        if isinstance(identifier, int):
+            # Search by ID
+            for p in self.__lista_pacientes:
+                if identifier == p.verCedula():
+                    return p
+            return None
+        else:
+            # Search by name
+            results = []
+            for p in self.__lista_pacientes:
+                if p.verNombre().startswith(identifier):
+                    results.append(p)
+            return results
+
+    def verDatosPacienteNombre(self, nombre):
+        results = []
+        for p in self.__lista_pacientes:
+            if p.verNombre().lower().startswith(nombre.lower()):
+                results.append(p)
+        return results
+
+    def verNumeroPacientes(self):
+        print("En el sistema hay: " + str(len(self.__lista_pacientes)) + " pacientes")
 def main():
     sis = Sistema() 
     #probemos lo que llevamos programado
     while True:
-        #TAREA HACER EL MENU
-        opcion = int(input("\nIngrese \n0 para salir, \n1 para ingresar nuevo paciente, \n2 ver Paciente\n\t--> ")) 
-        
+        opcion = int(input("\nIngrese \n0 para salir, \n1 para ingresar nuevo paciente, \n2 ver Paciente por cedula, \n3 ver Paciente por nombre\n\t--> ")) 
+
         if opcion == 1:
-            #ingreso pacientes
             print("A continuacion se solicitaran los datos ...") 
             #1. Se solicitan los datos
             cedula = int(input("Ingrese la cedula: ")) 
@@ -91,6 +105,20 @@ def main():
                 print("Servicio: " + p.verServicio()) 
             else:
                 print("No existe un paciente con esa cedula") 
+        elif opcion == 3:
+            nombre = input("Ingrese el nombre a buscar (puede ser completo o como recuerde): ")
+            #le pido al sistema que me devuelva en la variable p los pacientes que inicien con el nombre dado
+            p = sis.verDatosPacienteNombre(nombre)
+            #2. si encuentro al paciente imprimo los datos
+            if p != None:
+                for paciente in p:
+                    print("Nombre: " + paciente.verNombre()) 
+                    print("Cedula: " + str(paciente.verCedula())) 
+                    print("Genero: " + paciente.verGenero()) 
+                    print("Servicio: " + paciente.verServicio()) 
+                    print()
+            else:
+                print("No existe un paciente con ese nombre") 
         elif opcion !=0:
             continue 
         else:
@@ -98,12 +126,4 @@ def main():
 
 #aca el python descubre cual es la funcion principal
 if __name__ == "__main__":
-    main() 
-        
-        
-        
-        
-        
-        
-        
-        
+    main()
